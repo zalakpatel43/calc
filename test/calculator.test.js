@@ -2,39 +2,62 @@
 
 const { JSDOM } = require('jsdom');
 
-// Load the HTML content using jsdom
+// Define the HTML content for the test
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Calculator Test</title>
+  <script>
+    function calculate() {
+      const display = document.getElementById('display');
+      try {
+        display.value = eval(display.value); // Perform the calculation
+      } catch (e) {
+        display.value = 'Error';
+      }
+    }
+  </script>
 </head>
 <body>
   <form name="calculator">
     <input id="display" type="text" name="display" readonly>
-    <input class="button mathButtons" type="button" value="=" onclick="calculator.display.value = eval(calculator.display.value)">
+    <input class="button mathButtons" type="button" value="=" onclick="calculate()">
   </form>
 </body>
 </html>
 `;
 
+// Initialize jsdom with the HTML content
 const dom = new JSDOM(htmlContent, { runScripts: "dangerously" });
-const document = dom.window.document;
-const calculator = document.forms['calculator'];
-const display = calculator.querySelector('#display');
+const { document, window } = dom;
 
-// Simulate clicking the buttons by directly manipulating the DOM
+// Define the test cases
 test('Addition operation', () => {
-  display.value = '2 + 2';
+  const display = document.getElementById('display');
   const equalsButton = document.querySelector('.button.mathButtons[value="="]');
-  equalsButton.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));  // Simulate the click event
+  
+  // Set the expression
+  display.value = '2 + 2';
+  
+  // Simulate the click event
+  equalsButton.click();
+  
+  // Verify the result
   expect(display.value).toBe('4');
 });
 
 test('Subtraction operation', () => {
-  display.value = '5 - 3';
+  const display = document.getElementById('display');
   const equalsButton = document.querySelector('.button.mathButtons[value="="]');
-  equalsButton.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));  // Simulate the click event
+  
+  // Set the expression
+  display.value = '5 - 3';
+  
+  // Simulate the click event
+  equalsButton.click();
+  
+  // Verify the result
   expect(display.value).toBe('2');
 });
