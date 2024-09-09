@@ -2,7 +2,7 @@
 
 const { JSDOM } = require('jsdom');
 
-// Define the HTML content for the test
+// Load the HTML content using jsdom
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -19,29 +19,22 @@ const htmlContent = `
 </html>
 `;
 
-// Initialize jsdom with the HTML content
-const dom = new JSDOM(htmlContent, { runScripts: "dangerously", resources: "usable" });
-const { document, window } = dom;
+const dom = new JSDOM(htmlContent, { runScripts: "dangerously" });
+const document = dom.window.document;
+const calculator = document.forms['calculator'];
+const display = calculator.querySelector('#display');
 
-// Function to simulate the calculator logic
-function simulateCalculation(expression) {
-  const calculator = document.forms['calculator'];
-  const display = calculator.querySelector('#display');
-  
-  display.value = expression; // Set the expression
-  try {
-    display.value = eval(display.value); // Perform the calculation
-  } catch (error) {
-    display.value = 'Error';
-  }
-  return display.value;
-}
-
-// Tests
+// Simulate clicking the buttons by directly manipulating the DOM
 test('Addition operation', () => {
-  expect(simulateCalculation('2 + 2')).toBe('4'); // Check if addition works
+  display.value = '2 + 2';
+  const equalsButton = document.querySelector('.button.mathButtons[value="="]');
+  equalsButton.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));  // Simulate the click event
+  expect(display.value).toBe('4');
 });
 
 test('Subtraction operation', () => {
-  expect(simulateCalculation('5 - 3')).toBe('2'); // Check if subtraction works
+  display.value = '5 - 3';
+  const equalsButton = document.querySelector('.button.mathButtons[value="="]');
+  equalsButton.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));  // Simulate the click event
+  expect(display.value).toBe('2');
 });
