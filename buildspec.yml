@@ -1,23 +1,43 @@
+version: 0.2
+
 phases:
   install:
     runtime-versions:
-      nodejs: 16
+      nodejs: 16  # Specify only one runtime version
     commands:
       - echo Installing dependencies...
       - npm install  # Install necessary dependencies
 
   pre_build:
     commands:
-      - echo Preparing the build environment...
-      # Any preparation commands before the main build can go here
+      - echo Running pre-build commands...
+      # Include any additional preparation commands here
 
   build:
     commands:
-      - echo Running tests...
+      - echo Running build commands...
       - npm test  # Run your tests here
-      # Include any other build commands as needed
 
   post_build:
     commands:
-      - echo Post build phase...
-      # Actions like deploying or cleaning up can be included here
+      - echo Running post-build commands...
+      # Include any additional deployment or cleanup commands here
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
+
+hooks:
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: root
