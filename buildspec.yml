@@ -15,13 +15,22 @@ hooks:
     - location: scripts/stop_server.sh
       timeout: 300
       runas: root
+
 phases:
   install:
+    runtime-versions:
+      nodejs: 16
     commands:
       - npm install
-  pre-test:
+  pre_build:
     commands:
-      - npm run build
+      - echo Running pre-build steps...
+  build:
+    commands:
+      - echo Running build steps...
+  post_build:
+    commands:
+      - echo Running post-build steps...
   test:
     commands:
       - npm run test
