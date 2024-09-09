@@ -30,8 +30,12 @@ const htmlContent = `
 `;
 
 // Initialize jsdom with the HTML content
-const dom = new JSDOM(htmlContent, { runScripts: "dangerously" });
-const { document, window } = dom;
+const dom = new JSDOM(htmlContent, { runScripts: "dangerously", resources: "usable" });
+const { document } = dom.window;
+
+// Assign global document and window objects to mimic browser environment
+global.document = document;
+global.window = dom.window;
 
 // Define the test cases
 test('Addition operation', () => {
