@@ -3,6 +3,9 @@
 # Define the URL for the health check
 HEALTH_CHECK_URL="http://localhost:80/health"
 
+echo "Waiting for the service to start..."
+sleep 10  # Wait for 10 seconds
+
 echo "Starting validation of the service..."
 
 # Send a request to the health check URL and capture the HTTP status code
