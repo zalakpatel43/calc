@@ -2,7 +2,7 @@
 # scripts/validate_service.sh
 
 # Ensure this is the correct URL or endpoint your application should serve
-URL="https://localhost"
+URL="http://localhost"
 
 # Check if the service is running and returning a 200 OK status
 HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL)
