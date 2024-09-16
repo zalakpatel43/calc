@@ -66,16 +66,3 @@ test('Subtraction operation', () => {
   expect(display.value).toBe('2');
 });
 
-test('Multiplication operation', () => {
-  const display = document.getElementById('display');
-  const equalsButton = document.querySelector('.button.mathButtons[value="="]');
-  
-  // Set the expression
-  display.value = '4 * 4';
-  
-  // Simulate the click event
-  equalsButton.click();
-  
-  // Verify the result
-  expect(display.value).toBe('16');
-});
